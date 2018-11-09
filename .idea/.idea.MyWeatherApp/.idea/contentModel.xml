@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$USER_HOME$/.Rider2018.2/system/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.Rider2018.2/system/resharper-host/local/Transient/ReSharperHost/v182/SolutionCaches/_MyWeatherApp.-779763442.00" t="ExcludeRecursive" />
+    <e p="$PROJECT_DIR$" t="IncludeFlat">
+      <e p="MyWeatherApp" t="IncludeRecursive">
+        <e p="Controller.cs" t="Include" />
+        <e p="Forecast.cs" t="Include" />
+        <e p="LocationIdListBuilder.cs" t="Include" />
+        <e p="Model.cs" t="Include" />
+        <e p="MyWeatherApp.csproj" t="IncludeRecursive" />
+        <e p="Program.cs" t="Include" />
+        <e p="View.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="cities.db" t="Include" />
+        <e p="cities.db-journal" t="Include" />
+        <e p="city.list.json" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.1" t="Include">
+              <e p="MyWeatherApp.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="MyWeatherApp.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
