@@ -14,8 +14,8 @@
         <e p="View.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="cities.db" t="Include" />
-        <e p="cities.db-journal" t="Include" />
         <e p="city.list.json" t="Include" />
+        <e p="city.list.test.json" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp2.1" t="Include">

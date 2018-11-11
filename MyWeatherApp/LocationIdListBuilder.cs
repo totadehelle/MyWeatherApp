@@ -13,7 +13,14 @@ namespace MyWeatherApp
         public int Id { get; set; }
         public string Name { get; set; }
         public string Country { get; set; }
-        public Dictionary<string, double> Coord;
+        
+        public Coordinates Coord;
+    }
+
+    public class Coordinates
+    {
+        public float lon { get; set; }
+        public float lat { get; set; }
     }
     
     public class LocationsContext : DbContext
@@ -28,7 +35,7 @@ namespace MyWeatherApp
     
     public class LocationIdListBuilder
     {
-        private const string ResourceFilePath = @"/home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/city.list.json";
+        private const string ResourceFilePath = @"/home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/city.list.test.json";
         
         public readonly LocationsContext _context;
 
@@ -43,13 +50,12 @@ namespace MyWeatherApp
             
             try
             {   
-                using (StreamReader sr = new StreamReader(ResourceFilePath))
+                using (StreamReader file = File.OpenText(ResourceFilePath))
                 {
-                    JsonSerializer se = new JsonSerializer();
-                    JsonTextReader reader = new JsonTextReader(sr);
-                    citiesList = se.Deserialize<List<City>>(reader);
+                    JsonSerializer serializer = new JsonSerializer();
+                    citiesList = (List<City>)serializer.Deserialize(file, typeof(List<City>));
                 }
-
+                
                 AddCitiesToDb(citiesList);
                 
             }
@@ -65,14 +71,13 @@ namespace MyWeatherApp
         {
             try
             {
-                using (_context)
-                {
+                
                     foreach (var city in list)
                     {
                         _context.Cities.Add(city);
                         _context.SaveChanges();
                     }
-                }
+                
                 Console.WriteLine("The database was successfully made!");
             }
             catch (Exception e)
