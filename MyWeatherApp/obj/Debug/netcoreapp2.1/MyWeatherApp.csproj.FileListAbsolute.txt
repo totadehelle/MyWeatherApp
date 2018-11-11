@@ -1,0 +1,11 @@
+/home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/bin/Debug/netcoreapp2.1/MyWeatherApp.deps.json
+/home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/bin/Debug/netcoreapp2.1/MyWeatherApp.runtimeconfig.json
+/home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/bin/Debug/netcoreapp2.1/MyWeatherApp.runtimeconfig.dev.json
+/home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/bin/Debug/netcoreapp2.1/MyWeatherApp.dll
+/home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/bin/Debug/netcoreapp2.1/MyWeatherApp.pdb
+/home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/obj/Debug/netcoreapp2.1/MyWeatherApp.csprojAssemblyReference.cache
+/home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/obj/Debug/netcoreapp2.1/MyWeatherApp.csproj.CoreCompileInputs.cache
+/home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/obj/Debug/netcoreapp2.1/MyWeatherApp.AssemblyInfoInputs.cache
+/home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/obj/Debug/netcoreapp2.1/MyWeatherApp.AssemblyInfo.cs
+/home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/obj/Debug/netcoreapp2.1/MyWeatherApp.dll
+/home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/obj/Debug/netcoreapp2.1/MyWeatherApp.pdb
