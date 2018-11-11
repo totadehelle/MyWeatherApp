@@ -7,15 +7,21 @@
       <e p="MyWeatherApp" t="IncludeRecursive">
         <e p="Controller.cs" t="Include" />
         <e p="Forecast.cs" t="Include" />
-        <e p="LocationIdListBuilder.cs" t="Include" />
+        <e p="LocationsRepository" t="Include">
+          <e p="CitiesDbBuilder.cs" t="Include" />
+          <e p="City.cs" t="Include" />
+          <e p="Coordinates.cs" t="Include" />
+          <e p="LocationsContext.cs" t="Include" />
+          <e p="cities.db" t="Include" />
+          <e p="city.list.json" t="Include" />
+          <e p="city.list.test.json" t="Include" />
+        </e>
         <e p="Model.cs" t="Include" />
         <e p="MyWeatherApp.csproj" t="IncludeRecursive" />
         <e p="Program.cs" t="Include" />
         <e p="View.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="cities.db" t="Include" />
-        <e p="city.list.json" t="Include" />
-        <e p="city.list.test.json" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp2.1" t="Include">
