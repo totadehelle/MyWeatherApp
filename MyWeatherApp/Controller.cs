@@ -24,8 +24,7 @@ namespace MyWeatherApp
         {
             if (_context.Cities.Count() == 0)
             {
-                CitiesDbBuilder builder = new CitiesDbBuilder(_context);
-                builder.DecompressSourceFile(builder.DownloadSourceFile());
+                CitiesDbBuilder builder = new CitiesDbBuilder();
                 builder.MakeCitiesDbFromJson();
             }
         }

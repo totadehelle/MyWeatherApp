@@ -10,8 +10,11 @@ namespace MyWeatherApp
     public class Model
     {
         private const string URI = "api.openweathermap.org/data/2.5/forecast";
-        /*private string _location;
-        private int _days;*/
+
+        private const string APPID = "bbee93d67b25c3a25d873df876df5b23";
+        
+        private string _location;
+        private int _daysAhead;
         
         
         HttpClient client = new HttpClient();

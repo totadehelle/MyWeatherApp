@@ -3,34 +3,31 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace MyWeatherApp.LocationsRepository
 {
     public class CitiesDbBuilder
     {
-        private const string ResourceFilePath = @"/home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/city.list.test.json";
+        private const string ResourseFileLink = "http://bulk.openweathermap.org/sample/city.list.json.gz"; 
         
-        public readonly LocationsContext _context;
-
-        public CitiesDbBuilder(LocationsContext context)
-        {
-            _context = context;
-        }
-
         public void MakeCitiesDbFromJson()
         {
+            string filePath = DecompressSourceFile(DownloadSourceFile());
+            
             List<City> citiesList = new List<City>();
             
             try
             {   
-                using (StreamReader file = File.OpenText(ResourceFilePath))
+                using (StreamReader file = File.OpenText(filePath))
                 {
                     JsonSerializer serializer = new JsonSerializer();
                     citiesList = (List<City>)serializer.Deserialize(file, typeof(List<City>));
                 }
                 
                 AddCitiesToDb(citiesList);
+                File.Delete(filePath);
             }
             
             catch (Exception e)
@@ -44,14 +41,20 @@ namespace MyWeatherApp.LocationsRepository
         
         private void AddCitiesToDb(List<City> list)
         {
+            Console.WriteLine($"Adding {list.Count} cities to the database...");
+            
             try
             {
-                
+                using(LocationsContext context = new LocationsContext())
+                {
                     foreach (var city in list)
                     {
-                        _context.Cities.Add(city);
-                        _context.SaveChanges();
+                        context.Cities.Add(city);
+                        context.Coords.Add(city.Coord); // выяснить про внешний ключ
                     }
+                    
+                    context.SaveChanges();
+                }
                 
                 Console.WriteLine("The database was successfully made!");
             }
@@ -64,37 +67,56 @@ namespace MyWeatherApp.LocationsRepository
 
         
         
-        public FileInfo DownloadSourceFile()
+        private FileInfo DownloadSourceFile()
         {
-            string URI = "http://bulk.openweathermap.org/sample/city.list.json.gz";
             FileInfo info = null;
-            using (WebClient wc = new WebClient())
+            Console.WriteLine("Downloading source files...");
+            try
             {
-                string save_path = @"/home/alter/Загрузки/";
-                string name = "city.list.json.gz";
-                wc.DownloadFile(URI, save_path + name);
-                info = new FileInfo(save_path + name);
+                using (WebClient webClient = new WebClient())
+                {
+                    string savePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"/Загрузки/";
+                    string name = "city.list.json.gz";
+                    webClient.DownloadFile(ResourseFileLink, savePath + name);
+                    info = new FileInfo(savePath + name);
+                }
             }
-
+            catch (Exception e)
+            {
+                Console.WriteLine("Source files downloading failed:");
+                Console.WriteLine(e.Message);
+            }
             return info;
         }
 
 
-        public void DecompressSourceFile(FileInfo fileToDecompress)
+        private string DecompressSourceFile(FileInfo fileToDecompress)
         {
-            using (FileStream originalFileStream = fileToDecompress.OpenRead())
+            string newFileName = null;
+            Console.WriteLine("Decompressing source files...");
+            try
             {
-                string currentFileName = fileToDecompress.FullName;
-                string newFileName = currentFileName.Remove(currentFileName.Length - fileToDecompress.Extension.Length);
-
-                using (FileStream decompressedFileStream = File.Create(newFileName))
+                using (FileStream originalFileStream = fileToDecompress.OpenRead())
                 {
-                    using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
+                    string currentFileName = fileToDecompress.FullName;
+                    newFileName = currentFileName.Remove(currentFileName.Length - fileToDecompress.Extension.Length);
+
+                    using (FileStream decompressedFileStream = File.Create(newFileName))
                     {
-                        decompressionStream.CopyTo(decompressedFileStream);
+                        using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
+                        {
+                            decompressionStream.CopyTo(decompressedFileStream);
+                        }
                     }
+                    File.Delete(currentFileName);
                 }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine("Source files decompression failed:");
+                Console.WriteLine(e.Message);
+            }
+            return newFileName;
         }
     }
 }
