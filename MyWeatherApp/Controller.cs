@@ -9,20 +9,21 @@ namespace MyWeatherApp
     {
         private Model _model;
         private View _view;
-        public readonly LocationsContext _context;
         
-        public Controller(string[] args, LocationsContext context)
+        public Controller(string[] args)
         {
-            _model = new Model();
+            //_model = new Model();
             _view = new View();
-            _context = context;
-            _context.Database.EnsureCreated();
-            FillDbIfEmpty();
+            using (LocationsContext context = new LocationsContext())
+            {
+                context.Database.EnsureCreated();
+                FillDbIfEmpty(context);
+            }
         }
 
-        private void FillDbIfEmpty()
+        private void FillDbIfEmpty(LocationsContext context)
         {
-            if (_context.Cities.Count() == 0)
+            if (context.Cities.Count() == 0)
             {
                 CitiesDbBuilder builder = new CitiesDbBuilder();
                 builder.MakeCitiesDbFromJson();
@@ -32,33 +33,36 @@ namespace MyWeatherApp
         public void ForTestOnly()
         {
             string locationId;
+            IQueryable<City> citiesFound;
             
-            var citiesFound = from city in _context.Cities
-                where city.Name == "Novinki"
-                select city;
-
-            if (citiesFound.Count() == 0)
+            using (LocationsContext context = new LocationsContext())
             {
-                Console.WriteLine("The city is not found.");
-                return;
-            }
+                citiesFound = from city in context.Cities
+                    where city.Name == "Meget"
+                    select city;
                 
-            if (citiesFound.Count() > 1)
-            {
-                foreach (var city in citiesFound)
+                if (citiesFound.Count() == 0)
                 {
-                    //если при запуске приложения база уже существует, Coord получаемых объектов = null и здесь приложение падает. Если база создается после запуска, то все ок.
-                    Console.WriteLine(
-                        $"ID: {city.Id} \n City: {city.Name} \n Country: {city.Country} \n Coordinates: \n longitude: {city.Coord.lon}, \n latitude: {city.Coord.lat} \n");
+                    Console.WriteLine("The city is not found.");
+                    return;
                 }
+                
+                if (citiesFound.Count() > 1)
+                {
+                    foreach (var city in citiesFound)
+                    {
+                        Console.WriteLine($"ID: {city.Id} \n City: {city.Name} \n Country: {city.Country} \n Coordinates: \n longitude: {city.Lon}, \n latitude: {city.Lat} \n");
+                    }
 
-                Console.WriteLine("Please select your city and print its id:");
-                locationId = Console.ReadLine();
-                Console.WriteLine(locationId);
-                return;
+                    Console.WriteLine("Please select your city and print its id:");
+                    locationId = Console.ReadLine();
+                    Console.WriteLine(locationId);
+                    return;
+                }
+                
+                locationId = citiesFound.First().Id.ToString();
             }
 
-            locationId = citiesFound.First().Id.ToString();
             Console.WriteLine(locationId);
         }
     }

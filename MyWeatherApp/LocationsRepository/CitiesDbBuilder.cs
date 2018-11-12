@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using System.Threading;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
@@ -49,8 +50,9 @@ namespace MyWeatherApp.LocationsRepository
                 {
                     foreach (var city in list)
                     {
+                        
                         context.Cities.Add(city);
-                        context.Coords.Add(city.Coord); // выяснить про внешний ключ
+                        //context.Coords.Add(city.Coord); // выяснить про внешний ключ
                     }
                     
                     context.SaveChanges();

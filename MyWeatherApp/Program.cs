@@ -8,8 +8,8 @@ namespace MyWeatherApp
     {
         static void Main(string[] args)
         {
-            Controller controller = new Controller(args, new LocationsContext());
-            //controller.ForTestOnly();
+            Controller controller = new Controller(args);
+            controller.ForTestOnly();
         }
     }
 }
