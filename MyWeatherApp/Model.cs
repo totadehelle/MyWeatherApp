@@ -15,31 +15,41 @@ namespace MyWeatherApp
         private string _locationId;
         private int _daysAhead;
         
+        static HttpClient client = new HttpClient();
+        
         public Model(string locationId, int daysAhead)
         {
             _locationId = locationId;
-            _daysAhead = daysAhead;
+            //_daysAhead = daysAhead;
         }
 
-
-        public async Task<Forecast> GetForecast()
+        public async Task<WeatherNow> GetWeatherNow()
         {
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:64195/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
-            
-            Forecast forecast = null;
-            string path = URI + _locationId;
-            
-            HttpResponseMessage response = await client.GetAsync(path);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                forecast = await response.Content.ReadAsAsync<Forecast>();
-            }
+                client.BaseAddress = new Uri("http://localhost:64195/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
             
-            return forecast;
+                WeatherNow weatherNow = null;
+                Uri path = new Uri(URI + _locationId);
+            
+                HttpResponseMessage response = await client.GetAsync(path.PathAndQuery);
+                if (response.IsSuccessStatusCode)
+                {
+                    weatherNow = await response.Content.ReadAsAsync<WeatherNow>();
+                }
+            
+                return weatherNow;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return null;
+
         }
     }
 }

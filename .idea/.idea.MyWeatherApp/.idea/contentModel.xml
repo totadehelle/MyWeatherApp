@@ -5,14 +5,16 @@
     <e p="$USER_HOME$/.Rider2018.2/system/resharper-host/local/Transient/ReSharperHost/v182/SolutionCaches/_MyWeatherApp.-779763442.00" t="ExcludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeFlat">
       <e p="MyWeatherApp" t="IncludeRecursive">
+        <e p="App.config" t="Include" />
         <e p="Controller.cs" t="Include" />
-        <e p="Forecast.cs" t="Include" />
         <e p="IModel.cs" t="Include" />
         <e p="LimitProxy.cs" t="Include" />
         <e p="LocationsRepository" t="Include">
           <e p="CitiesDbBuilder.cs" t="Include" />
+          <e p="CitiesRepository.cs" t="Include" />
           <e p="City.cs" t="Include" />
           <e p="Coordinates.cs" t="Include" />
+          <e p="IRepository.cs" t="Include" />
           <e p="LocationsContext.cs" t="Include" />
           <e p="ProgressBar.cs" t="Include" />
         </e>
@@ -20,6 +22,7 @@
         <e p="MyWeatherApp.csproj" t="IncludeRecursive" />
         <e p="Program.cs" t="Include" />
         <e p="View.cs" t="Include" />
+        <e p="WeatherNow.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="cities.db" t="Include" />
         <e p="obj" t="ExcludeRecursive">

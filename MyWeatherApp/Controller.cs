@@ -12,7 +12,7 @@ namespace MyWeatherApp
         
         public Controller(string[] args)
         {
-            //_model = new Model();
+            //_model = new LimitProxy();
             _view = new View();
             using (LocationsContext context = new LocationsContext())
             {

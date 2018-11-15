@@ -9,7 +9,12 @@ namespace MyWeatherApp
         static void Main(string[] args)
         {
             Controller controller = new Controller(args);
-            controller.ForTestOnly();
+            //controller.ForTestOnly();
+            
+            var model = new Model("2172797", 2);
+            var weather = model.GetWeatherNow().Result;
+            Console.WriteLine(weather.name);
+            Console.WriteLine(weather.main.Temp);
         }
     }
 }

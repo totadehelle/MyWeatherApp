@@ -4,6 +4,6 @@ namespace MyWeatherApp
 {
     public interface IModel
     {
-        Task<Forecast> GetForecast();
+        Task<WeatherNow> GetWeatherNow();
     }
 }

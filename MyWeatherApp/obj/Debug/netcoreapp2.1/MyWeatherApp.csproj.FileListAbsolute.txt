@@ -9,3 +9,4 @@
 /home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/obj/Debug/netcoreapp2.1/MyWeatherApp.AssemblyInfo.cs
 /home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/obj/Debug/netcoreapp2.1/MyWeatherApp.dll
 /home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/obj/Debug/netcoreapp2.1/MyWeatherApp.pdb
+/home/alter/RiderProjects/MyWeatherApp/MyWeatherApp/bin/Debug/netcoreapp2.1/MyWeatherApp.dll.config
