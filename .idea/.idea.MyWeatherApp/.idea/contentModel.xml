@@ -26,6 +26,7 @@
         <e p="Program.cs" t="Include" />
         <e p="TimeLimitProxy.cs" t="Include" />
         <e p="View.cs" t="Include" />
+        <e p="WeatherForecast.cs" t="Include" />
         <e p="WeatherNow.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="cities.db" t="Include" />

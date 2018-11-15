@@ -45,8 +45,6 @@ namespace MyWeatherApp
                 WeatherNow weatherNow = null;
                 var path = URI + _locationId;
 
-                /*Bug: Cannot deserialize the current JSON array (e.g. [1,2,3]) into type 'MyWeatherApp.Weather' because the type requires a JSON object (e.g. {"name":"value"}) to deserialize correctly. To fix this error either change the JSON to a JSON object (e.g. {"name":"value"}) or change the deserialized type to an array or a type that implements a collection interface (e.g. ICollection, IList) like List<T> that can be deserialized from a JSON array. JsonArrayAttribute can also be added to the type to force it to deserialize from a JSON array. Path 'weather', line 1, position 46.*/
-                
                 HttpResponseMessage response = await client.GetAsync(path);
                 if (response.IsSuccessStatusCode)
                 {

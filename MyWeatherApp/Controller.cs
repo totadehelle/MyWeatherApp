@@ -108,16 +108,5 @@ namespace MyWeatherApp
 
             return locationId;
         }
-
-        #region TEST
-
-        public void ForTestOnly()
-        {
-            var model = new Model("2172797", 0);
-            var weather = model.GetWeather();
-        }
-
-        #endregion
-        
     }
 }

@@ -1,9 +1,11 @@
+using System.Collections.Generic;
+
 namespace MyWeatherApp
 {
     public class WeatherNow : IWeather
     {
         public string name { get; set; }
-        public Weather weather { get; set; }
+        public List<Weather> weather { get; set; }
         public Main main { get; set; }
         public Wind wind { get; set; }
     }
