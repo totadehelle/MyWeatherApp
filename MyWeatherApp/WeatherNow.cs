@@ -1,6 +1,6 @@
 namespace MyWeatherApp
 {
-    public class WeatherNow
+    public class WeatherNow : IWeather
     {
         public string name { get; set; }
         public Weather weather { get; set; }

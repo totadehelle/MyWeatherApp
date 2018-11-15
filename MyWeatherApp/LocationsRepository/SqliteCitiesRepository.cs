@@ -4,24 +4,25 @@ using System.Linq;
 
 namespace MyWeatherApp.LocationsRepository
 {
-    public class CitiesRepository : IRepository
+    public class SqliteCitiesRepository : IRepository
     {
         private LocationsContext context;
- 
-        public CitiesRepository()
+
+        public SqliteCitiesRepository()
         {
-            this.context = new LocationsContext();
+            context = new LocationsContext();
         }
- 
-        public IEnumerable<City> GetCityList(string cityName)
+        
+        public IQueryable<City> GetCityList(string cityName)
         {
             var citiesFound = from city in context.Cities
                 where city.Name == cityName
                 select city;
 
             return citiesFound;
+            
         }
-        
+
         private bool disposed = false;
  
         public virtual void Dispose(bool disposing)
@@ -41,7 +42,5 @@ namespace MyWeatherApp.LocationsRepository
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
-        
     }
 }

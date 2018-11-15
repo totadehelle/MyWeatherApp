@@ -5,13 +5,13 @@ using System.Collections.Specialized;
 
 namespace MyWeatherApp
 {
-    public class LimitProxy : IModel
+    public class TimeLimitProxy : IModel
     {
         public readonly string _locationId;
         public readonly int _daysAhead;
         private Model _realModel;
         
-        public LimitProxy(string locationId, int daysAhead)
+        public TimeLimitProxy(string locationId, int daysAhead)
         {
             _locationId = locationId;
             _daysAhead = daysAhead;
@@ -19,16 +19,19 @@ namespace MyWeatherApp
         }
         
         
-        public Task<WeatherNow> GetWeatherNow()
+        public IWeather GetWeather()
         {
-            //проверка что последний запрос был более чем 10 мин назад
+            //Checks if the last qiery to the weather API was not later than 10 min ago (that is the API requirement for free accounts)
+            
+            //Here will be showing of the cashed data if the queries limit is exceeded. 
+            
             var currentTime = DateTime.Now;
             DateTime lastQueryTime;
 
             if (DateTime.TryParse(ConfigurationManager.AppSettings.Get("LastQueryTime"), out lastQueryTime))
             {
                 var span = currentTime - lastQueryTime;
-                if (span.TotalMinutes > 10)
+                if (span.TotalMinutes >= 10)
                 {
                     Configuration currentConfig =
                         ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -36,12 +39,16 @@ namespace MyWeatherApp
                     currentConfig.Save(ConfigurationSaveMode.Modified);
                     ConfigurationManager.RefreshSection("appSettings");
 
-                    return _realModel.GetWeatherNow();
+                    return _realModel.GetWeather();
                 }
                 else
                 {
                     int timeLeft = 10 - (int) span.TotalMinutes;
-                    Console.WriteLine("Please wait for {0} minutes before your next query.", timeLeft);
+                    if (timeLeft == 1)
+                    {
+                        Console.WriteLine("Please wait for {0} minute before your next query.", timeLeft);
+                    }
+                    else Console.WriteLine("Please wait for {0} minutes before your next query.", timeLeft);
                     return null;
                 }
             }
