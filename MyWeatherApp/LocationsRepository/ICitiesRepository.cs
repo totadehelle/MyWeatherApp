@@ -4,8 +4,8 @@ using System.Linq;
 
 namespace MyWeatherApp.LocationsRepository
 {
-    public interface IRepository : IDisposable
+    public interface ICitiesRepository : IDisposable
     {
-        IQueryable<City> GetCityList(string cityName);
+        IQueryable<City> Get(string cityName);
     }
 }

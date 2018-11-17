@@ -46,7 +46,7 @@ namespace MyWeatherApp.LocationsRepository
             
             try
             {
-                using(LocationsContext context = new LocationsContext())
+                using(AppContext context = new AppContext())
                 {
                     foreach (var city in list)
                     {

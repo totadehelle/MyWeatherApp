@@ -1,12 +1,14 @@
 using System;
 using Microsoft.EntityFrameworkCore;
+using MyWeatherApp.WeatherModels;
 
 namespace MyWeatherApp.LocationsRepository
 
 {
-    public class LocationsContext : DbContext
+    public class AppContext : DbContext
     {
         public DbSet<City> Cities { get; set; }
+        public DbSet<StoredWeather> CashedForecasts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

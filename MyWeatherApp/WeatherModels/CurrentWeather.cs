@@ -6,12 +6,13 @@ namespace MyWeatherApp.WeatherModels
 {
     public class CurrentWeather : IWeather
     {
+        public int id { get; set; }
         public string name { get; set; }
         public List<Weather> weather { get; set; }
         public Main main { get; set; }
         public Wind wind { get; set; }
         
-        public DateTime Date{ get; set; }
+        public DateTime Date{ get; private set; }
         
         [NotMapped]
         private string _dt_txt { get; set; }
