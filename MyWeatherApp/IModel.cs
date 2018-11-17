@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using MyWeatherApp.WeatherModels;
 
 namespace MyWeatherApp
 {

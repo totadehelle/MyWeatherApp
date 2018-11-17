@@ -1,8 +1,8 @@
 using System;
-using System.Threading;
 using MyWeatherApp.LocationsRepository;
 using System.Linq;
 using MyWeatherApp.CommandLine.Utility;
+using MyWeatherApp.WeatherModels;
 
 namespace MyWeatherApp
 {
@@ -50,10 +50,28 @@ namespace MyWeatherApp
                 Console.WriteLine("-d value cannot be less than 0");
                 return;
             }
+
+            if (_daysAhead > 5)
+            {
+                Console.WriteLine("-d value can be from 0 to 5");
+            }
             
             _model = new TimeLimitProxy(locationId, _daysAhead);
             var weather = _model.GetWeather();
-            _view.ShowWeather(weather);
+            
+            if (weather is CurrentWeather)
+            {
+                CurrentWeather currentWeather = weather as CurrentWeather;
+                _view.ShowCurrentWeather(currentWeather);
+            }
+
+            if (weather is WeatherForecast)
+            {
+                WeatherForecast weatherForecast = weather as WeatherForecast;
+                var dayRequired = (from day in weatherForecast.list where day.Date.Date == (DateTime.Today.AddDays(_daysAhead)) select day).ToList();
+                weatherForecast.list = dayRequired;
+                _view.ShowWeatherForecast(weatherForecast);
+            }
         }
 
         private void FillDbIfEmpty(LocationsContext context)

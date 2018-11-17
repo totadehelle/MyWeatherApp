@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using System.Configuration;
 using System.Collections.Specialized;
+using MyWeatherApp.WeatherModels;
 
 namespace MyWeatherApp
 {
@@ -19,7 +20,7 @@ namespace MyWeatherApp
         }
         
         
-        public IWeather GetWeather()
+        public IWeather GetWeather() //async?
         {
             //Checks if the last qiery to the weather API was not later than 10 min ago (that is the API requirement for free accounts)
             
@@ -28,7 +29,8 @@ namespace MyWeatherApp
             var currentTime = DateTime.Now;
             DateTime lastQueryTime;
 
-            if (DateTime.TryParse(ConfigurationManager.AppSettings.Get("LastQueryTime"), out lastQueryTime))
+            var t = ConfigurationManager.AppSettings.Get("LastQueryTime");
+            if (DateTime.TryParse(t, out lastQueryTime))
             {
                 var span = currentTime - lastQueryTime;
                 if (span.TotalMinutes >= 10)

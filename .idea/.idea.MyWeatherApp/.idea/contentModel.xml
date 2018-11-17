@@ -12,7 +12,6 @@
         </e>
         <e p="Controller.cs" t="Include" />
         <e p="IModel.cs" t="Include" />
-        <e p="IWeather.cs" t="Include" />
         <e p="LocationsRepository" t="Include">
           <e p="CitiesDbBuilder.cs" t="Include" />
           <e p="City.cs" t="Include" />
@@ -26,8 +25,14 @@
         <e p="Program.cs" t="Include" />
         <e p="TimeLimitProxy.cs" t="Include" />
         <e p="View.cs" t="Include" />
-        <e p="WeatherForecast.cs" t="Include" />
-        <e p="WeatherNow.cs" t="Include" />
+        <e p="WeatherModels" t="Include">
+          <e p="CurrentWeather.cs" t="Include" />
+          <e p="IWeather.cs" t="Include" />
+          <e p="Main.cs" t="Include" />
+          <e p="Weather.cs" t="Include" />
+          <e p="WeatherForecast.cs" t="Include" />
+          <e p="Wind.cs" t="Include" />
+        </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="cities.db" t="Include" />
         <e p="obj" t="ExcludeRecursive">
