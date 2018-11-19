@@ -37,6 +37,8 @@ namespace MyWeatherApp
 
         private void Process()
         {
+            #region CMD_ARGS_PROCESSING
+            
             if (_cmdline["help"] != null)
             {
                 Console.WriteLine("This app can show current weather or the weather forecast for chosen city. \n" +
@@ -73,6 +75,7 @@ namespace MyWeatherApp
                 }
                 if (_daysAhead > 0) type = WeatherType.Forecast;
             }
+            #endregion
 
             // It's reasonable to get forecast for other days once a day, and use one cashed response within one day.
             if (type == WeatherType.Forecast) 
@@ -81,6 +84,7 @@ namespace MyWeatherApp
             }
             
             _model = new TimeLimitProxy(locationId, _daysAhead);
+            
             var weather = _model.GetWeather();
 
             if (weather == null)
@@ -90,21 +94,15 @@ namespace MyWeatherApp
                 return;
             }
             
-            string message = null;
-            
-            if (type == WeatherType.Current)
-            {
-                CurrentWeather currentWeather = weather as CurrentWeather;
-                message = _view.ShowCurrentWeather(currentWeather);
-            }
-
             if (type == WeatherType.Forecast)
             {
                 WeatherForecast weatherForecast = weather as WeatherForecast;
                 var dayRequired = (from day in weatherForecast.list where day.Date.Date == (DateTime.Today.AddDays(_daysAhead)) select day).ToList();
                 weatherForecast.list = dayRequired;
-                message = _view.ShowWeatherForecast(weatherForecast);
+                weather = weatherForecast;
             }
+            
+            string message = _view.ShowWeather(weather, type);
             
             _cashRepository.Add(_cashRepository.Create(weather, message, type, _daysAhead));
         }
@@ -113,7 +111,7 @@ namespace MyWeatherApp
         {
             if (context.Cities.Count() == 0)
             {
-                CitiesDbBuilder builder = new CitiesDbBuilder();
+                AppDbBuilder builder = new AppDbBuilder();
                 builder.MakeCitiesDbFromJson();
             }
         }
@@ -162,17 +160,24 @@ namespace MyWeatherApp
             return locationId;
         }
 
-        public bool CheckCash(int locationID, WeatherType type)
+        private bool CheckCash(int locationID, WeatherType type)
         {
-            var forecastsFound = _cashRepository.Get(locationID, _daysAhead, type);
-            if (forecastsFound.Count() > 0)
+            try
             {
-                Console.WriteLine("Cashed data: \n");
-                Console.WriteLine(forecastsFound.First().Message);
-                return true;
+                var forecastsFound = _cashRepository.Get(locationID, _daysAhead, type);
+                if (forecastsFound.Count() > 0)
+                {
+                    Console.WriteLine("Cashed data: \n");
+                    Console.WriteLine(forecastsFound.Last().Message);
+                    return true;
+                }
+                return false;
             }
-
-            return false;
+            catch (Exception e)
+            {
+                // if the table was not created - there is no cash
+                return false;
+            }
         }
     }
 }

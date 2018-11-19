@@ -1,4 +1,5 @@
 using System;
+using System.Data.SQLite;
 using System.Linq;
 using MyWeatherApp.WeatherModels;
 
@@ -19,13 +20,13 @@ namespace MyWeatherApp.LocationsRepository
             
             var forecastsFound = from forecast in context.CashedForecasts
                 where
-                    forecast.Id == locationID
+                    forecast.CityId == locationID
                 where
-                    forecast.queryDate.Date == DateTime.Today
+                    forecast.QueryDate.Date == DateTime.Today
                 where
-                    forecast.requiredDate.Date == DateTime.Today.AddDays(daysAhead)
+                    forecast.RequiredDate.Date == DateTime.Today.AddDays(daysAhead)
                 where
-                    forecast.type == type
+                    forecast.Type == type
                 select forecast;
                     
             return forecastsFound;
@@ -38,18 +39,18 @@ namespace MyWeatherApp.LocationsRepository
             {
                 case WeatherType.Current:
                     CurrentWeather currentWeather = weather as CurrentWeather;
-                    forecast.Id = currentWeather.id;
-                    forecast.queryDate = DateTime.Now;
-                    forecast.requiredDate = DateTime.Now;
-                    forecast.type = WeatherType.Current;
+                    forecast.CityId = currentWeather.id;
+                    forecast.QueryDate = DateTime.Now;
+                    forecast.RequiredDate = DateTime.Now;
+                    forecast.Type = WeatherType.Current;
                     forecast.Message = message;
                     break;
                 case WeatherType.Forecast:
                     WeatherForecast weatherForecast = weather as WeatherForecast;
-                    forecast.Id = weatherForecast.city.Id;
-                    forecast.queryDate = DateTime.Now;
-                    forecast.requiredDate = DateTime.Now.AddDays(daysAhead);
-                    forecast.type = WeatherType.Forecast;
+                    forecast.CityId = weatherForecast.city.Id;
+                    forecast.QueryDate = DateTime.Now;
+                    forecast.RequiredDate = DateTime.Now.AddDays(daysAhead);
+                    forecast.Type = WeatherType.Forecast;
                     forecast.Message = message;
                     break;
             }
@@ -66,10 +67,11 @@ namespace MyWeatherApp.LocationsRepository
         private void DeleteObsoleteData()
         {
             context.CashedForecasts.RemoveRange(from forecast in context.CashedForecasts 
-                where forecast.queryDate.Date != DateTime.Now.Date select forecast);
+                where forecast.QueryDate.Date != DateTime.Now.Date select forecast);
             context.SaveChanges();
+            
         }
-
+        
         private bool disposed = false;
  
         public virtual void Dispose(bool disposing)

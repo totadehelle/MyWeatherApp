@@ -12,7 +12,7 @@ namespace MyWeatherApp.LocationsRepository
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Filename=cities.db");
+            optionsBuilder.UseSqlite("Filename=weatherapp.db");
         }
     }
 }
