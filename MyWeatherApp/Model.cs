@@ -21,12 +21,6 @@ namespace MyWeatherApp
         private string _locationId;
         private int _daysAhead;
 
-        private enum WeatherType
-        {
-            Current,
-            Forecast
-        }
-
         static HttpClient client = new HttpClient();
 
         public Model(string locationId, int daysAhead)
@@ -44,10 +38,11 @@ namespace MyWeatherApp
                 path = CURRENT_WEATHER_URI + _locationId;
                 type = WeatherType.Current;
             }
-
-            else path = FORECAST_URI + _locationId;
-
-            type = WeatherType.Forecast;
+            else
+            {
+                path = FORECAST_URI + _locationId;
+                type = WeatherType.Forecast;
+            }
 
             return GetDataFromApi(path, type).Result;
         }

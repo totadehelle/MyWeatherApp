@@ -4,16 +4,16 @@ using System.Linq;
 
 namespace MyWeatherApp.LocationsRepository
 {
-    public class SqliteCitiesRepository : IRepository
+    public class SqliteCitiesCitiesRepository : ICitiesRepository
     {
-        private LocationsContext context;
+        private AppContext context;
 
-        public SqliteCitiesRepository()
+        public SqliteCitiesCitiesRepository()
         {
-            context = new LocationsContext();
+            context = new AppContext();
         }
         
-        public IQueryable<City> GetCityList(string cityName)
+        public IQueryable<City> Get(string cityName)
         {
             var citiesFound = from city in context.Cities
                 where city.Name == cityName

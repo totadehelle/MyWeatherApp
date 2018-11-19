@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
-using System.Threading;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System.Data.SQLite;
 
 namespace MyWeatherApp.LocationsRepository
 {
@@ -29,6 +28,7 @@ namespace MyWeatherApp.LocationsRepository
                 
                 AddCitiesToDb(citiesList);
                 File.Delete(filePath);
+                AddCashedForecastsTable();
             }
             
             catch (Exception e)
@@ -37,8 +37,23 @@ namespace MyWeatherApp.LocationsRepository
                 Console.WriteLine(e.Message);
             }
         }
-        
-        
+
+        private void AddCashedForecastsTable()
+        {
+            SQLiteConnection conn = new SQLiteConnection("Data Source=cities.db;Version=3;");
+            conn.Open();
+            SQLiteCommand command;
+            command = new SQLiteCommand(
+                "CREATE TABLE IF NOT EXISTS \"CashedForecasts\" " +
+                "(\"Id\" INTEGER PRIMARY KEY NOT NULL UNIQUE, " +
+                "\"queryDate\" DATETIME, " +
+                "\"requiredDate\" DATETIME, " +
+                "\"type\" VARCHAR(20), " +
+                "\"Message\" VARCHAR(500))" 
+                , conn);
+            command.ExecuteNonQuery();
+            conn.Close();
+        }
         
         private void AddCitiesToDb(List<City> list)
         {
@@ -46,7 +61,7 @@ namespace MyWeatherApp.LocationsRepository
             
             try
             {
-                using(LocationsContext context = new LocationsContext())
+                using(AppContext context = new AppContext())
                 {
                     foreach (var city in list)
                     {
