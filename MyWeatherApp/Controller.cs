@@ -37,6 +37,18 @@ namespace MyWeatherApp
 
         private void Process()
         {
+            if (_cmdline["help"] != null)
+            {
+                Console.WriteLine("This app can show current weather or the weather forecast for chosen city. \n" +
+                                  "There are the following parameters available: \n" +
+                                  "--help - shows this manual. \n" +
+                                  "--location - sets the city. Example: --location London. By default the app will get your current location using your IP-address. \n" +
+                                  "-d - sets number of days ahead. Example: -d 1. -d value can be from 0 (today)" +
+                                  " to 5 (five days ahead). By default -d value is 0. Negative numbers will be replaced by 0.\n" +
+                                  "All the parameters are not mandatory.");
+                return;
+            }
+            
             _location = _cmdline["location"] ?? GetCurrentLocation();
             
             string locationId = GetLocationId(_location);
@@ -62,10 +74,22 @@ namespace MyWeatherApp
                 if (_daysAhead > 0) type = WeatherType.Forecast;
             }
 
-            if(CheckCash(Int32.Parse(locationId), type)) return;
+            // It's reasonable to get forecast for other days once a day, and use one cashed response within one day.
+            if (type == WeatherType.Forecast) 
+            {
+                if(CheckCash(Int32.Parse(locationId), type)) return;
+            }
             
             _model = new TimeLimitProxy(locationId, _daysAhead);
             var weather = _model.GetWeather();
+
+            if (weather == null)
+            {
+                // Current weather may change during the day, so we need cash only if we cannot get actual info.
+                CheckCash(Int32.Parse(locationId), type); 
+                return;
+            }
+            
             string message = null;
             
             if (type == WeatherType.Current)

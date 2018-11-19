@@ -11,11 +11,12 @@ namespace MyWeatherApp.LocationsRepository
         public SqliteCashedForecastsRepository()
         {
             context = new AppContext();
-            DeleteObsoleteData();
         }
         
         public IQueryable<StoredWeather> Get(int locationID, int daysAhead, WeatherType type)
         {
+            DeleteObsoleteData();
+            
             var forecastsFound = from forecast in context.CashedForecasts
                 where
                     forecast.Id == locationID
@@ -65,7 +66,7 @@ namespace MyWeatherApp.LocationsRepository
         private void DeleteObsoleteData()
         {
             context.CashedForecasts.RemoveRange(from forecast in context.CashedForecasts 
-                where forecast.queryDate != DateTime.Now.Date select forecast);
+                where forecast.queryDate.Date != DateTime.Now.Date select forecast);
             context.SaveChanges();
         }
 
