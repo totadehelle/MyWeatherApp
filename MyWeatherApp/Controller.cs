@@ -1,9 +1,9 @@
 using System;
-using MyWeatherApp.LocationsRepository;
+using MyWeatherApp.Repositories;
 using System.Linq;
 using MyWeatherApp.CommandLine.Utility;
 using MyWeatherApp.WeatherModels;
-using AppContext = MyWeatherApp.LocationsRepository.AppContext;
+using AppContext = MyWeatherApp.Repositories.AppContext;
 
 namespace MyWeatherApp
 {
@@ -44,18 +44,36 @@ namespace MyWeatherApp
                 Console.WriteLine("This app can show current weather or the weather forecast for chosen city. \n" +
                                   "There are the following parameters available: \n" +
                                   "--help - shows this manual. \n" +
-                                  "--location - sets the city. Example: --location London. By default the app will get your current location using your IP-address. \n" +
-                                  "-d - sets number of days ahead. Example: -d 1. -d value can be from 0 (today)" +
+                                  "--location - sets the city. Example: --location London. Without this parameter the app will use default city if set. \n" +
+                                  "-d - sets number of days ahead. Example: -d 1. -d value can be from 0 (today) \n" +
                                   " to 5 (five days ahead). By default -d value is 0. Negative numbers will be replaced by 0.\n" +
+                                  "-f - sets chosen city as default. Example: --location London -f. \n" +
                                   "All the parameters are not mandatory.");
                 return;
             }
-            
-            _location = _cmdline["location"] ?? GetCurrentLocation();
-            
-            string locationId = GetLocationId(_location);
 
-            if (locationId == null) return;
+            string locationId;
+            
+            if (_cmdline["location"] != null)
+            {
+                _location = _cmdline["location"];
+                locationId = GetLocationId(_location);
+            }
+            else
+            {
+                locationId = GetCurrentLocation();
+            }
+
+            if (locationId == null)
+            {
+                Console.WriteLine("Please choose your city using --location command; you can also set any city as default using command -f.");
+                return;
+            }
+
+            if (_cmdline["f"] != null)
+            {
+                _citiesRepository.SetFavourite(Int32.Parse(locationId));
+            }
 
             WeatherType type = WeatherType.Current;
 
@@ -118,8 +136,7 @@ namespace MyWeatherApp
 
         private string GetCurrentLocation()
         {
-            //определение города по IP
-            return null;
+            return _citiesRepository.GetFavourite()?.Id.ToString();
         }
 
         private string GetLocationId(string location)
@@ -160,11 +177,11 @@ namespace MyWeatherApp
             return locationId;
         }
 
-        private bool CheckCash(int locationID, WeatherType type)
+        private bool CheckCash(int locationId, WeatherType type)
         {
             try
             {
-                var forecastsFound = _cashRepository.Get(locationID, _daysAhead, type);
+                var forecastsFound = _cashRepository.Get(locationId, _daysAhead, type);
                 if (forecastsFound.Count() > 0)
                 {
                     Console.WriteLine("Cashed data: \n");

@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using MyWeatherApp.WeatherModels;
 
-namespace MyWeatherApp.LocationsRepository
+namespace MyWeatherApp.Repositories
 {
     public interface ICashedForecastsRepository : IDisposable
     {

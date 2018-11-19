@@ -2,7 +2,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using MyWeatherApp.WeatherModels;
 
-namespace MyWeatherApp.LocationsRepository
+namespace MyWeatherApp.Repositories
 
 {
     public class AppContext : DbContext

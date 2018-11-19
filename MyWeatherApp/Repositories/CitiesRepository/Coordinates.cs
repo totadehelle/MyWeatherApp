@@ -1,4 +1,4 @@
-namespace MyWeatherApp.LocationsRepository
+namespace MyWeatherApp.Repositories
 {
     public class Coordinates
     {

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using MyWeatherApp.LocationsRepository;
+using MyWeatherApp.Repositories;
 
 namespace MyWeatherApp.WeatherModels
 {

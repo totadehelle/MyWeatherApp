@@ -3,22 +3,22 @@ using System.Data.SQLite;
 using System.Linq;
 using MyWeatherApp.WeatherModels;
 
-namespace MyWeatherApp.LocationsRepository
+namespace MyWeatherApp.Repositories
 {
     public class SqliteCashedForecastsRepository : ICashedForecastsRepository
     {
-        private AppContext context;
+        private AppContext _context;
 
         public SqliteCashedForecastsRepository()
         {
-            context = new AppContext();
+            _context = new AppContext();
         }
         
         public IQueryable<StoredWeather> Get(int locationID, int daysAhead, WeatherType type)
         {
             DeleteObsoleteData();
             
-            var forecastsFound = from forecast in context.CashedForecasts
+            var forecastsFound = from forecast in _context.CashedForecasts
                 where
                     forecast.CityId == locationID
                 where
@@ -60,15 +60,15 @@ namespace MyWeatherApp.LocationsRepository
 
         public void Add(StoredWeather forecast)
         {
-            context.CashedForecasts.Add(forecast);
-            context.SaveChanges();
+            _context.CashedForecasts.Add(forecast);
+            _context.SaveChanges();
         }
 
         private void DeleteObsoleteData()
         {
-            context.CashedForecasts.RemoveRange(from forecast in context.CashedForecasts 
+            _context.CashedForecasts.RemoveRange(from forecast in _context.CashedForecasts 
                 where forecast.QueryDate.Date != DateTime.Now.Date select forecast);
-            context.SaveChanges();
+            _context.SaveChanges();
             
         }
         
@@ -80,7 +80,7 @@ namespace MyWeatherApp.LocationsRepository
             {
                 if(disposing)
                 {
-                    context.Dispose();
+                    _context.Dispose();
                 }
             }
             this.disposed = true;

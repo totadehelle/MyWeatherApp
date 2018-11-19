@@ -23,7 +23,7 @@ namespace MyWeatherApp
         private string ShowCurrentWeather(CurrentWeather currentWeather)
         {
             string message =
-                $"\n\nDate: {DateTime.Now} \n City: {currentWeather.name} \n Weather: {currentWeather.weather[0].Description} \n" +
+                $"\nDate: {DateTime.Now} \n City: {currentWeather.name} \n Weather: {currentWeather.weather[0].Description} \n" +
                 $"Tempreature: {currentWeather.main.Temp} C \n Atmospheric pressure: {currentWeather.main.Pressure} \n Humidity: {currentWeather.main.Humidity} \n" +
                 $"Wind speed: {currentWeather.wind.Speed} km/h";
             Console.WriteLine(message);

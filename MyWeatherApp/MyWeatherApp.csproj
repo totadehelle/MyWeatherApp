@@ -14,4 +14,9 @@
       <PackageReference Include="System.Data.SQLite" Version="1.0.109.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Repositories\IRepository.cs" />
+      <Compile Remove="Repositories\UnitOfWork.cs" />
+    </ItemGroup>
+
 </Project>

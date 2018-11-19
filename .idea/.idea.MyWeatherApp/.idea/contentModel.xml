@@ -12,19 +12,23 @@
         </e>
         <e p="Controller.cs" t="Include" />
         <e p="IModel.cs" t="Include" />
-        <e p="LocationsRepository" t="Include">
-          <e p="AppContext.cs" t="Include" />
-          <e p="AppDbBuilder.cs" t="Include" />
-          <e p="City.cs" t="Include" />
-          <e p="Coordinates.cs" t="Include" />
-          <e p="ICahedForecastsRepository.cs" t="Include" />
-          <e p="ICitiesRepository.cs" t="Include" />
-          <e p="SqliteCashedForecastsRepository.cs" t="Include" />
-          <e p="SqliteCitiesRepository.cs" t="Include" />
-        </e>
         <e p="Model.cs" t="Include" />
         <e p="MyWeatherApp.csproj" t="IncludeRecursive" />
         <e p="Program.cs" t="Include" />
+        <e p="Repositories" t="Include">
+          <e p="AppContext.cs" t="Include" />
+          <e p="AppDbBuilder.cs" t="Include" />
+          <e p="CashedForecastsRepository" t="Include">
+            <e p="ICahedForecastsRepository.cs" t="Include" />
+            <e p="SqliteCashedForecastsRepository.cs" t="Include" />
+          </e>
+          <e p="CitiesRepository" t="Include">
+            <e p="City.cs" t="Include" />
+            <e p="Coordinates.cs" t="Include" />
+            <e p="ICitiesRepository.cs" t="Include" />
+            <e p="SqliteCitiesRepository.cs" t="Include" />
+          </e>
+        </e>
         <e p="TimeLimitProxy.cs" t="Include" />
         <e p="View.cs" t="Include" />
         <e p="WeatherModels" t="Include">
@@ -45,6 +49,7 @@
             </e>
           </e>
         </e>
+        <e p="weatherapp.db" t="Include" />
       </e>
       <e p="MyWeatherApp.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />

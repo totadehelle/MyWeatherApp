@@ -6,7 +6,7 @@ using System.Net;
 using Newtonsoft.Json;
 using System.Data.SQLite;
 
-namespace MyWeatherApp.LocationsRepository
+namespace MyWeatherApp.Repositories
 {
     public class AppDbBuilder
     {
