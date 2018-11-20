@@ -23,22 +23,22 @@ namespace MyWeatherApp
         private string ShowCurrentWeather(CurrentWeather currentWeather)
         {
             string message =
-                $"\nDate: {DateTime.Now} \n City: {currentWeather.name} \n Weather: {currentWeather.weather[0].Description} \n" +
-                $"Tempreature: {currentWeather.main.Temp} C \n Atmospheric pressure: {currentWeather.main.Pressure} \n Humidity: {currentWeather.main.Humidity} \n" +
-                $"Wind speed: {currentWeather.wind.Speed} km/h";
+                $"\nDate: {DateTime.Now} \nCity: {currentWeather.Name} \nWeather: {currentWeather.Weather[0].Description} \n" +
+                $"Temperature: {currentWeather.Main.Temp} C \nAtmospheric pressure: {currentWeather.Main.Pressure} hPa \nHumidity: {currentWeather.Main.Humidity} % \n" +
+                $"Wind speed: {currentWeather.Wind.Speed} meter/sec";
             Console.WriteLine(message);
             return message;
         }
 
         private string ShowWeatherForecast(WeatherForecast weatherForecast)
         {
-            StringBuilder message = new StringBuilder($"City: {weatherForecast.city.Name} \n");
+            StringBuilder message = new StringBuilder($"City: {weatherForecast.City.Name} \n");
             
-            foreach (var partOfDay in weatherForecast.list)
+            foreach (var partOfDay in weatherForecast.List)
             {
-                message.Append($"\n\n{partOfDay.Date} \n Weather: {partOfDay.weather[0].Description} \n" +
-                               $"Temperature: {partOfDay.main.Temp} C \n Atmospheric pressure: {partOfDay.main.Pressure} \n Humidity: {partOfDay.main.Humidity} \n" +
-                               $"Wind speed: {partOfDay.wind.Speed} km/h");
+                message.Append($"\n\n{partOfDay.Date} \nWeather: {partOfDay.Weather[0].Description} \n" +
+                               $"Temperature: {partOfDay.Main.Temp} C \nAtmospheric pressure: {partOfDay.Main.Pressure} hPa \nHumidity: {partOfDay.Main.Humidity} % \n" +
+                               $"Wind speed: {partOfDay.Wind.Speed} meter/sec");
             }
 
             Console.WriteLine(message);

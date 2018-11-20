@@ -1,19 +1,16 @@
-using System;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 
 
-namespace MyWeatherApp.CommandLine.Utility
+namespace MyWeatherApp.Utility
 {
     
     //source: https://www.codeproject.com/Articles/3111/C-NET-Command-Line-Arguments-Parser
     
     public class Arguments
     {
-        // Variables
         private StringDictionary Parameters;
 
-        // Constructor
         public Arguments(string[] Args)
         {
             Parameters = new StringDictionary();

@@ -1,28 +1,28 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using MyWeatherApp.Utility;
 using Newtonsoft.Json;
-using System.Data.SQLite;
 
 namespace MyWeatherApp.Repositories
 {
     public class AppDbBuilder
     {
-        private const string ResourseFileLink = "http://bulk.openweathermap.org/sample/city.list.json.gz"; 
+        private const string ResourceFileLink = "http://bulk.openweathermap.org/sample/city.list.json.gz"; 
         
         public void MakeCitiesDbFromJson()
         {
-            string filePath = DecompressSourceFile(DownloadSourceFile());
-            
-            List<City> citiesList = new List<City>();
-            
+            var filePath = DecompressSourceFile(DownloadSourceFile());
+
             try
-            {   
+            {
+                List<City> citiesList;
                 using (StreamReader file = File.OpenText(filePath))
                 {
-                    JsonSerializer serializer = new JsonSerializer();
+                    var serializer = new JsonSerializer();
                     citiesList = (List<City>)serializer.Deserialize(file, typeof(List<City>));
                 }
                 
@@ -37,21 +37,24 @@ namespace MyWeatherApp.Repositories
             }
         }
 
-        private void AddCitiesToDb(List<City> list)
+        private void AddCitiesToDb(IReadOnlyList<City> list)
         {
-            Console.WriteLine($"Adding {list.Count} cities to the database...");
+            var totalCities = list.Count;
+            Console.WriteLine($"Adding {totalCities} cities to the database...");
             
             try
             {
-                using(AppContext context = new AppContext())
+                using(var context = new AppContext())
                 {
-                    foreach (var city in list)
+                    using (var progress = new ProgressBar())
                     {
-                        
-                        context.Cities.Add(city);
-                        //context.Coords.Add(city.Coord); // выяснить про внешний ключ
+                        for (var i = 0; i < totalCities; i++)
+                        {
+                            context.Cities.Add(list[i]);
+                            progress.Report((double)i/totalCities);
+                        }
                     }
-                    
+                    Console.WriteLine("Saving the database...");
                     context.SaveChanges();
                 }
                 
@@ -63,8 +66,6 @@ namespace MyWeatherApp.Repositories
                 Console.WriteLine(e.Message);
             }
         }
-
-        
         
         private FileInfo DownloadSourceFile()
         {
@@ -74,9 +75,9 @@ namespace MyWeatherApp.Repositories
             {
                 using (WebClient webClient = new WebClient())
                 {
-                    string savePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"/Загрузки/";
-                    string name = "city.list.json.gz";
-                    webClient.DownloadFile(ResourseFileLink, savePath + name);
+                    var savePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                    const string name = "city.list.json.gz";
+                    webClient.DownloadFile(ResourceFileLink, savePath + name);
                     info = new FileInfo(savePath + name);
                 }
             }
@@ -88,7 +89,6 @@ namespace MyWeatherApp.Repositories
             return info;
         }
 
-
         private string DecompressSourceFile(FileInfo fileToDecompress)
         {
             string newFileName = null;
@@ -97,12 +97,12 @@ namespace MyWeatherApp.Repositories
             {
                 using (FileStream originalFileStream = fileToDecompress.OpenRead())
                 {
-                    string currentFileName = fileToDecompress.FullName;
+                    var currentFileName = fileToDecompress.FullName;
                     newFileName = currentFileName.Remove(currentFileName.Length - fileToDecompress.Extension.Length);
 
                     using (FileStream decompressedFileStream = File.Create(newFileName))
                     {
-                        using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
+                        using (var decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
                         {
                             decompressionStream.CopyTo(decompressedFileStream);
                         }

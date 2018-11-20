@@ -1,5 +1,4 @@
 using System;
-using System.Data.SQLite;
 using System.Linq;
 using MyWeatherApp.WeatherModels;
 
@@ -39,7 +38,7 @@ namespace MyWeatherApp.Repositories
             {
                 case WeatherType.Current:
                     CurrentWeather currentWeather = weather as CurrentWeather;
-                    forecast.CityId = currentWeather.id;
+                    forecast.CityId = currentWeather.Id;
                     forecast.QueryDate = DateTime.Now;
                     forecast.RequiredDate = DateTime.Now;
                     forecast.Type = WeatherType.Current;
@@ -47,7 +46,7 @@ namespace MyWeatherApp.Repositories
                     break;
                 case WeatherType.Forecast:
                     WeatherForecast weatherForecast = weather as WeatherForecast;
-                    forecast.CityId = weatherForecast.city.Id;
+                    forecast.CityId = weatherForecast.City.Id;
                     forecast.QueryDate = DateTime.Now;
                     forecast.RequiredDate = DateTime.Now.AddDays(daysAhead);
                     forecast.Type = WeatherType.Forecast;
@@ -73,8 +72,8 @@ namespace MyWeatherApp.Repositories
         }
         
         private bool disposed = false;
- 
-        public virtual void Dispose(bool disposing)
+
+        protected virtual void Dispose(bool disposing)
         {
             if(!this.disposed)
             {

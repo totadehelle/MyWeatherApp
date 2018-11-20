@@ -6,7 +6,7 @@ namespace MyWeatherApp
     {
         static void Main(string[] args)
         {
-            Controller controller = new Controller(args, new SqliteCitiesRepository(), new SqliteCashedForecastsRepository());
+            var controller = new Controller(args, new SqliteCitiesRepository(), new SqliteCashedForecastsRepository());
         }
     }
 }

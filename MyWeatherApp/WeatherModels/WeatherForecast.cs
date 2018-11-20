@@ -5,7 +5,7 @@ namespace MyWeatherApp.WeatherModels
 {
     public class WeatherForecast : IWeather
     {
-        public City city { get; set; }
-        public List<CurrentWeather> list { get; set; }
+        public City City { get; set; }
+        public List<CurrentWeather> List { get; set; }
     }
 }
