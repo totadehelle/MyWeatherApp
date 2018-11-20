@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SQLitePCL;
 
-namespace MyWeatherApp.LocationsRepository
+namespace MyWeatherApp.Repositories
 {
     public class City
     {
@@ -12,7 +12,8 @@ namespace MyWeatherApp.LocationsRepository
         public string Country { get; set; }
         public float Lat { get; private set; }
         public float Lon { get; private set; }
-        
+        public bool IsPreferred { get; set; } = false;
+
         [NotMapped]
         private Coordinates _coord;
         
@@ -25,8 +26,5 @@ namespace MyWeatherApp.LocationsRepository
                 Lon = value.lon;
             }
         }
-        
-        
-
     }
 }

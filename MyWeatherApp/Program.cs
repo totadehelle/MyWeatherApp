@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using MyWeatherApp.LocationsRepository;
+﻿using MyWeatherApp.Repositories;
 
 namespace MyWeatherApp
 {
@@ -8,7 +6,7 @@ namespace MyWeatherApp
     {
         static void Main(string[] args)
         {
-            Controller controller = new Controller(args, new SqliteCitiesCitiesRepository(), new SqliteCashedForecastsRepository());
+            Controller controller = new Controller(args, new SqliteCitiesRepository(), new SqliteCashedForecastsRepository());
         }
     }
 }

@@ -1,31 +1,32 @@
 using System;
+using System.Data.SQLite;
 using System.Linq;
 using MyWeatherApp.WeatherModels;
 
-namespace MyWeatherApp.LocationsRepository
+namespace MyWeatherApp.Repositories
 {
     public class SqliteCashedForecastsRepository : ICashedForecastsRepository
     {
-        private AppContext context;
+        private AppContext _context;
 
         public SqliteCashedForecastsRepository()
         {
-            context = new AppContext();
+            _context = new AppContext();
         }
         
         public IQueryable<StoredWeather> Get(int locationID, int daysAhead, WeatherType type)
         {
             DeleteObsoleteData();
             
-            var forecastsFound = from forecast in context.CashedForecasts
+            var forecastsFound = from forecast in _context.CashedForecasts
                 where
-                    forecast.Id == locationID
+                    forecast.CityId == locationID
                 where
-                    forecast.queryDate.Date == DateTime.Today
+                    forecast.QueryDate.Date == DateTime.Today
                 where
-                    forecast.requiredDate.Date == DateTime.Today.AddDays(daysAhead)
+                    forecast.RequiredDate.Date == DateTime.Today.AddDays(daysAhead)
                 where
-                    forecast.type == type
+                    forecast.Type == type
                 select forecast;
                     
             return forecastsFound;
@@ -38,18 +39,18 @@ namespace MyWeatherApp.LocationsRepository
             {
                 case WeatherType.Current:
                     CurrentWeather currentWeather = weather as CurrentWeather;
-                    forecast.Id = currentWeather.id;
-                    forecast.queryDate = DateTime.Now;
-                    forecast.requiredDate = DateTime.Now;
-                    forecast.type = WeatherType.Current;
+                    forecast.CityId = currentWeather.id;
+                    forecast.QueryDate = DateTime.Now;
+                    forecast.RequiredDate = DateTime.Now;
+                    forecast.Type = WeatherType.Current;
                     forecast.Message = message;
                     break;
                 case WeatherType.Forecast:
                     WeatherForecast weatherForecast = weather as WeatherForecast;
-                    forecast.Id = weatherForecast.city.Id;
-                    forecast.queryDate = DateTime.Now;
-                    forecast.requiredDate = DateTime.Now.AddDays(daysAhead);
-                    forecast.type = WeatherType.Forecast;
+                    forecast.CityId = weatherForecast.city.Id;
+                    forecast.QueryDate = DateTime.Now;
+                    forecast.RequiredDate = DateTime.Now.AddDays(daysAhead);
+                    forecast.Type = WeatherType.Forecast;
                     forecast.Message = message;
                     break;
             }
@@ -59,17 +60,18 @@ namespace MyWeatherApp.LocationsRepository
 
         public void Add(StoredWeather forecast)
         {
-            context.CashedForecasts.Add(forecast);
-            context.SaveChanges();
+            _context.CashedForecasts.Add(forecast);
+            _context.SaveChanges();
         }
 
         private void DeleteObsoleteData()
         {
-            context.CashedForecasts.RemoveRange(from forecast in context.CashedForecasts 
-                where forecast.queryDate.Date != DateTime.Now.Date select forecast);
-            context.SaveChanges();
+            _context.CashedForecasts.RemoveRange(from forecast in _context.CashedForecasts 
+                where forecast.QueryDate.Date != DateTime.Now.Date select forecast);
+            _context.SaveChanges();
+            
         }
-
+        
         private bool disposed = false;
  
         public virtual void Dispose(bool disposing)
@@ -78,7 +80,7 @@ namespace MyWeatherApp.LocationsRepository
             {
                 if(disposing)
                 {
-                    context.Dispose();
+                    _context.Dispose();
                 }
             }
             this.disposed = true;

@@ -2,7 +2,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using MyWeatherApp.WeatherModels;
 
-namespace MyWeatherApp.LocationsRepository
+namespace MyWeatherApp.Repositories
 
 {
     public class AppContext : DbContext
@@ -12,7 +12,7 @@ namespace MyWeatherApp.LocationsRepository
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Filename=cities.db");
+            optionsBuilder.UseSqlite("Filename=weatherapp.db");
         }
     }
 }

@@ -1,9 +1,9 @@
 using System;
-using MyWeatherApp.LocationsRepository;
+using MyWeatherApp.Repositories;
 using System.Linq;
 using MyWeatherApp.CommandLine.Utility;
 using MyWeatherApp.WeatherModels;
-using AppContext = MyWeatherApp.LocationsRepository.AppContext;
+using AppContext = MyWeatherApp.Repositories.AppContext;
 
 namespace MyWeatherApp
 {
@@ -37,23 +37,43 @@ namespace MyWeatherApp
 
         private void Process()
         {
+            #region CMD_ARGS_PROCESSING
+            
             if (_cmdline["help"] != null)
             {
                 Console.WriteLine("This app can show current weather or the weather forecast for chosen city. \n" +
                                   "There are the following parameters available: \n" +
                                   "--help - shows this manual. \n" +
-                                  "--location - sets the city. Example: --location London. By default the app will get your current location using your IP-address. \n" +
-                                  "-d - sets number of days ahead. Example: -d 1. -d value can be from 0 (today)" +
+                                  "--location - sets the city. Example: --location London. Without this parameter the app will use default city if set. \n" +
+                                  "-d - sets number of days ahead. Example: -d 1. -d value can be from 0 (today) \n" +
                                   " to 5 (five days ahead). By default -d value is 0. Negative numbers will be replaced by 0.\n" +
+                                  "-f - sets chosen city as default. Example: --location London -f. \n" +
                                   "All the parameters are not mandatory.");
                 return;
             }
-            
-            _location = _cmdline["location"] ?? GetCurrentLocation();
-            
-            string locationId = GetLocationId(_location);
 
-            if (locationId == null) return;
+            string locationId;
+            
+            if (_cmdline["location"] != null)
+            {
+                _location = _cmdline["location"];
+                locationId = GetLocationId(_location);
+            }
+            else
+            {
+                locationId = GetCurrentLocation();
+            }
+
+            if (locationId == null)
+            {
+                Console.WriteLine("Please choose your city using --location command; you can also set any city as default using command -f.");
+                return;
+            }
+
+            if (_cmdline["f"] != null)
+            {
+                _citiesRepository.SetFavourite(Int32.Parse(locationId));
+            }
 
             WeatherType type = WeatherType.Current;
 
@@ -73,6 +93,7 @@ namespace MyWeatherApp
                 }
                 if (_daysAhead > 0) type = WeatherType.Forecast;
             }
+            #endregion
 
             // It's reasonable to get forecast for other days once a day, and use one cashed response within one day.
             if (type == WeatherType.Forecast) 
@@ -81,6 +102,7 @@ namespace MyWeatherApp
             }
             
             _model = new TimeLimitProxy(locationId, _daysAhead);
+            
             var weather = _model.GetWeather();
 
             if (weather == null)
@@ -90,21 +112,15 @@ namespace MyWeatherApp
                 return;
             }
             
-            string message = null;
-            
-            if (type == WeatherType.Current)
-            {
-                CurrentWeather currentWeather = weather as CurrentWeather;
-                message = _view.ShowCurrentWeather(currentWeather);
-            }
-
             if (type == WeatherType.Forecast)
             {
                 WeatherForecast weatherForecast = weather as WeatherForecast;
                 var dayRequired = (from day in weatherForecast.list where day.Date.Date == (DateTime.Today.AddDays(_daysAhead)) select day).ToList();
                 weatherForecast.list = dayRequired;
-                message = _view.ShowWeatherForecast(weatherForecast);
+                weather = weatherForecast;
             }
+            
+            string message = _view.ShowWeather(weather, type);
             
             _cashRepository.Add(_cashRepository.Create(weather, message, type, _daysAhead));
         }
@@ -113,15 +129,14 @@ namespace MyWeatherApp
         {
             if (context.Cities.Count() == 0)
             {
-                CitiesDbBuilder builder = new CitiesDbBuilder();
+                AppDbBuilder builder = new AppDbBuilder();
                 builder.MakeCitiesDbFromJson();
             }
         }
 
         private string GetCurrentLocation()
         {
-            //определение города по IP
-            return null;
+            return _citiesRepository.GetFavourite()?.Id.ToString();
         }
 
         private string GetLocationId(string location)
@@ -162,17 +177,24 @@ namespace MyWeatherApp
             return locationId;
         }
 
-        public bool CheckCash(int locationID, WeatherType type)
+        private bool CheckCash(int locationId, WeatherType type)
         {
-            var forecastsFound = _cashRepository.Get(locationID, _daysAhead, type);
-            if (forecastsFound.Count() > 0)
+            try
             {
-                Console.WriteLine("Cashed data: \n");
-                Console.WriteLine(forecastsFound.First().Message);
-                return true;
+                var forecastsFound = _cashRepository.Get(locationId, _daysAhead, type);
+                if (forecastsFound.Count() > 0)
+                {
+                    Console.WriteLine("Cashed data: \n");
+                    Console.WriteLine(forecastsFound.Last().Message);
+                    return true;
+                }
+                return false;
             }
-
-            return false;
+            catch (Exception e)
+            {
+                // if the table was not created - there is no cash
+                return false;
+            }
         }
     }
 }
