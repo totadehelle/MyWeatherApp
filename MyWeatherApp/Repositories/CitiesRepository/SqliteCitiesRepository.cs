@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,8 +46,8 @@ namespace MyWeatherApp.Repositories
         }
 
         private bool disposed = false;
- 
-        public virtual void Dispose(bool disposing)
+
+        protected virtual void Dispose(bool disposing)
         {
             if(!this.disposed)
             {

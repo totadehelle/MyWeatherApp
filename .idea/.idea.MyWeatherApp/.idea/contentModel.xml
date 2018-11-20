@@ -6,10 +6,6 @@
     <e p="$PROJECT_DIR$" t="IncludeFlat">
       <e p="MyWeatherApp" t="IncludeRecursive">
         <e p="App.config" t="Include" />
-        <e p="CommandLine.Utility" t="Include">
-          <e p="Arguments.cs" t="Include" />
-          <e p="ProgressBar.cs" t="Include" />
-        </e>
         <e p="Controller.cs" t="Include" />
         <e p="IModel.cs" t="Include" />
         <e p="Model.cs" t="Include" />
@@ -30,6 +26,10 @@
           </e>
         </e>
         <e p="TimeLimitProxy.cs" t="Include" />
+        <e p="Utility" t="Include">
+          <e p="Arguments.cs" t="Include" />
+          <e p="ProgressBar.cs" t="Include" />
+        </e>
         <e p="View.cs" t="Include" />
         <e p="WeatherModels" t="Include">
           <e p="CurrentWeather.cs" t="Include" />

@@ -1,7 +1,4 @@
-using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using SQLitePCL;
 
 namespace MyWeatherApp.Repositories
 {
@@ -22,8 +19,8 @@ namespace MyWeatherApp.Repositories
         {
             get => _coord;
             set  { _coord = value;
-                Lat = value.lat;
-                Lon = value.lon;
+                Lat = value.Lat;
+                Lon = value.Lon;
             }
         }
     }

@@ -8,7 +8,7 @@ using System.Threading;
 /// </summary>
 
 
-namespace MyWeatherApp.CommandLine.Utility
+namespace MyWeatherApp.Utility
 {
     public class ProgressBar : IDisposable, IProgress<double>
     {
