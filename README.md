@@ -15,3 +15,7 @@ There are the following comand line arguments available:
 - -f - sets chosen city as default. Example: --location London -f.
 
 All the parameters are optional, except for --location in case when the default city is not set.
+
+Resources used:
+- for command line arguments parcing: https://www.codeproject.com/Articles/3111/C-NET-Command-Line-Arguments-Parser
+- for progress bar: https://gist.github.com/DanielSWolf/0ab6a96899cc5377bf54
