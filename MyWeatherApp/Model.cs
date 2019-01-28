@@ -11,7 +11,7 @@ namespace MyWeatherApp
         private const string Appid = "bbee93d67b25c3a25d873df876df5b23";
 
         private const string CurrentWeatherUri =
-            "http://api.openweathermap.org/data/2.5/Weather?units=metric&APPID=" + Appid + "&id=";
+            "http://api.openweathermap.org/data/2.5/weather?units=metric&APPID=" + Appid + "&id=";
 
         private const string ForecastUri =
             "http://api.openweathermap.org/data/2.5/forecast?units=metric&APPID=" + Appid + "&id=";
