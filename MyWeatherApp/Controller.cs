@@ -95,10 +95,10 @@ namespace MyWeatherApp
             }
             #endregion
 
-            // It's reasonable to get forecast for other days once a day, and use one cashed response within one day.
+            // It's reasonable to get forecast for other days once a day, and use one cached response within one day.
             if (type == WeatherType.Forecast) 
             {
-                if(CheckCash(int.Parse(locationId), type)) return;
+                if(CheckCache(int.Parse(locationId), type)) return;
             }
             
             _model = new TimeLimitProxy(locationId, _daysAhead);
@@ -108,7 +108,7 @@ namespace MyWeatherApp
             if (weather == null)
             {
                 // Current Weather may change during the day, so we need cash only if we cannot get actual info.
-                CheckCash(int.Parse(locationId), type); 
+                CheckCache(int.Parse(locationId), type); 
                 return;
             }
             
@@ -175,14 +175,14 @@ namespace MyWeatherApp
             return locationId;
         }
 
-        private bool CheckCash(int locationId, WeatherType type)
+        private bool CheckCache(int locationId, WeatherType type)
         {
             try
             {
                 var forecastsFound = _cashRepository.Get(locationId, _daysAhead, type);
                 if (forecastsFound.Any())
                 {
-                    Console.WriteLine("Cashed data: \n");
+                    Console.WriteLine("Cached data: \n");
                     Console.WriteLine(forecastsFound.Last().Message);
                     return true;
                 }
